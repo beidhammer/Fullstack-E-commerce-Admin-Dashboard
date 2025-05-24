@@ -1,6 +1,7 @@
 const { User, Role, Membership } = require('../models');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const { Op } = require('sequelize');
 
 const registerUser = async (userData) => {
   const { firstname, lastname, username, email, password, address, phone } = userData;

@@ -1,8 +1,7 @@
-// testing purposes
 const db = require('../models');
 
 db.sequelize.sync({ force: true }).then(async () => {
-  // Opprett medlemskap
+  // Add membership
   const membership = await db.Membership.create({
     id: 2,
     name: 'Standard',
@@ -10,13 +9,12 @@ db.sequelize.sync({ force: true }).then(async () => {
     min_quantity: 1
   });
 
-  // Opprett rolle
+  // Add role
   const role = await db.Role.create({
     id: 1,
     name: 'User'
   });
 
-  // Nå kan du opprette brukeren
   const newUser = await db.User.create({
     firstname: 'Ola',
     lastname: 'Nordmann',
