@@ -10,8 +10,8 @@ beforeAll(async () => {
   const loginRes = await request(app)
     .post('/auth/login')
     .send({
-      emailOrUsername: 'admin@example.com',
-      password: 'password123'
+      emailOrUsername: 'admin@noroff.no',
+      password: 'P@ssword2023'
     });
 
   token = loginRes.body.data.token;

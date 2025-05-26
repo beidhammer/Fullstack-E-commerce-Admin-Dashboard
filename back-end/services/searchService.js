@@ -1,53 +1,44 @@
-const { Product, Brand, Category } = require('../models');
-const { Op } = require('sequelize');
+const db = require('../models');
+const { sequelize } = db;
 
 const searchProducts = async (query) => {
-  const { name, brand, category, minPrice, maxPrice } = query;
+  const { name, brand, category } = query;
 
-  const whereClause = {
-    isdeleted: false,
-  };
+  let sql = `
+    SELECT 
+      products.id, products.name, products.description, products.unitprice, products.quantity,
+      products.imgurl, 
+      brands.name AS brand,
+      categories.name AS category
+    FROM products
+    LEFT JOIN brands ON products.brand_id = brands.id
+    LEFT JOIN categories ON products.category_id = categories.id
+    WHERE products.isdeleted = false
+  `;
+
+  const replacements = {};
 
   if (name) {
-    whereClause.name = { [Op.like]: `%${name}%` };
+    sql += ` AND products.name LIKE :name`;
+    replacements.name = `%${name}%`;
   }
-
-  if (minPrice || maxPrice) {
-    whereClause.unitprice = {};
-    if (minPrice) {
-      whereClause.unitprice[Op.gte] = parseFloat(minPrice);
-    }
-    if (maxPrice) {
-      whereClause.unitprice[Op.lte] = parseFloat(maxPrice);
-    }
-  }
-
-  const includeClause = [];
 
   if (brand) {
-    includeClause.push({
-      model: Brand,
-      where: { name: { [Op.like]: `%${brand}%` } },
-    });
-  } else {
-    includeClause.push({ model: Brand });
+    sql += ` AND brands.name LIKE :brand`;
+    replacements.brand = `%${brand}%`;
   }
 
   if (category) {
-    includeClause.push({
-      model: Category,
-      where: { name: { [Op.like]: `%${category}%` } },
-    });
-  } else {
-    includeClause.push({ model: Category });
+    sql += ` AND categories.name LIKE :category`;
+    replacements.category = `%${category}%`;
   }
 
-  const products = await Product.findAll({
-    where: whereClause,
-    include: includeClause,
+  const [results] = await sequelize.query(sql, {
+    replacements,
+    type: sequelize.QueryTypes.SELECT,
   });
 
-  return products;
+  return results;
 };
 
 module.exports = {

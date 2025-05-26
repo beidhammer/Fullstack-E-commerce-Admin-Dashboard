@@ -1,5 +1,22 @@
 const orderService = require('../services/orderService');
 
+exports.createOrder = async (req, res, next) => {
+  try {
+    const order = await orderService.createOrder(req.user.id);
+    res.status(201).json({
+      Status: 'success',
+      statuscode: 201,
+      data: { result: 'Order created', order }
+    });
+  } catch (error) {
+    res.status(400).json({
+      status: 'error',
+      statuscode: 400,
+      data: { result: error.message }
+    });
+  }
+};
+
 exports.getUserOrders = async (req, res, next) => {
   try {
     const orders = await orderService.getUserOrders(req.user.id);

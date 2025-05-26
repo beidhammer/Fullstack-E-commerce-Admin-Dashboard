@@ -42,7 +42,7 @@ module.exports = (sequelize, DataTypes) => {
   
     User.associate = (models) => {
       User.belongsTo(models.Role, { foreignKey: 'role_id' });
-      User.belongsTo(models.Membership, { foreignKey: 'membership_id' });
+      User.belongsTo(models.Membership, { foreignKey: 'membership_id', as: 'Membership' });
       User.hasMany(models.Cart, { foreignKey: 'user_id' });
       User.hasMany(models.Order, { foreignKey: 'user_id' });
     };
