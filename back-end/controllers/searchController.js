@@ -2,13 +2,22 @@ const searchService = require('../services/searchService');
 
 exports.searchProducts = async (req, res, next) => {
   try {
-    const products = await searchService.searchProducts(req.query);
+    const products = await searchService.searchProducts(req.body);
     res.json({
-      Status: 'success',
+      status: 'success',
       statuscode: 200,
-      data: { result: 'Search results', products },
+      data: {
+        result: products,
+        recordsFound: products.length
+      }
     });
   } catch (error) {
-    next(error);
+    res.status(400).json({
+      status: 'error',
+      statuscode: 400,
+      data: {
+        result: error.message
+      }
+    });
   }
 };

@@ -1,12 +1,10 @@
-#!/usr/bin/env node
-
 /**
  * Module dependencies.
  */
 var app = require('../app');
 var debug = require('debug')('base-express:server');
 var http = require('http');
-const db = require('../models'); // Du manglet denne
+const db = require('../models');
 
 /**
  * Get port from environment and store in Express.
@@ -17,7 +15,7 @@ app.set('port', port);
 /**
  * Sync database and start server.
  */
-db.sequelize.sync({ alter: true })
+db.sequelize.sync()
   .then(() => {
     console.log('Database synchronized');
 
