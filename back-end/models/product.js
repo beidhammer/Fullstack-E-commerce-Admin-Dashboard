@@ -15,11 +15,12 @@ module.exports = (sequelize, DataTypes) => {
     });
   
     Product.associate = (models) => {
-      Product.belongsTo(models.Brand, { foreignKey: 'brand_id' });
-      Product.belongsTo(models.Category, { foreignKey: 'category_id' });
-      Product.hasMany(models.CartItem, { foreignKey: 'product_id' });
-      Product.hasMany(models.OrderItem, { foreignKey: 'product_id' });
-    };
+    Product.belongsTo(models.Brand, { foreignKey: 'brand_id', as: 'brand' });
+    Product.belongsTo(models.Category, { foreignKey: 'category_id', as: 'category' });
+    Product.hasMany(models.CartItem, { foreignKey: 'product_id' });
+    Product.hasMany(models.OrderItem, { foreignKey: 'product_id' });
+  };
+
   
     return Product;
   };

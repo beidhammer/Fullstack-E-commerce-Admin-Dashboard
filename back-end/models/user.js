@@ -34,7 +34,15 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false
       },
       address: DataTypes.STRING,
-      phone: DataTypes.STRING
+      phone: DataTypes.STRING,
+      role_id: {
+      type: DataTypes.INTEGER,
+      defaultValue: 2
+      },
+      membership_id: {
+      type: DataTypes.INTEGER,
+      defaultValue: 1
+      }
     }, {
       tableName: 'users',
       timestamps: true

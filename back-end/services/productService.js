@@ -12,7 +12,12 @@ const getAllProducts = async () => {
 };
 
 const getProductById = async (id) => {
-  return await Product.findByPk(id);
+  return await Product.findByPk(id, {
+    include: [
+      { model: Brand, as: 'brand', attributes: ['id', 'name'] },
+      { model: Category, as: 'category', attributes: ['id', 'name'] }
+    ]
+  });
 };
 
 const createProduct = async (data) => {

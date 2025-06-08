@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Login - Admin</title>
+  <link rel="stylesheet" href="/stylesheets/style.css">
+  <style>
+    input, button {
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div style="display: flex; height: 100vh;">
+
+    <div style="flex: 2; background: url('/stylesheets/images/adminLoginPicture.jpeg') no-repeat center center / cover;"></div>
+
+    <div style="flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+      <h2>EPAdmin</h2>
+
+      <% if (error) { %>
+        <p style="color: red;"><%= error %></p>
+      <% } %>
+
+      <form method="POST" action="/login" style="display: flex; flex-direction: column; width: 80%;">
+        <label>Email or Username</label>
+        <input type="email" name="email" required>
+
+        <label>Password</label>
+        <input type="password" name="password" required>
+
+        <button type="submit">Sign me in</button>
+      </form>
+
+      <% if (token) { %>
+        <script>
+          localStorage.setItem('token', "<%= token %>");
+          window.location.href = "/admin/products";
+        </script>
+      <% } %>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,99 @@
+<%- include('partials/header', { user, token }) %>
+<h1>User Management</h1>
+<table border="1">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Username</th>
+      <th>First Name</th>
+      <th>Last Name</th>
+      <th>Email</th>
+      <th>Address</th>
+      <th>Phone</th>
+      <th>Role</th>
+      <th>Membership</th>
+      <th>Options</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% users.forEach(user => { %>
+      <tr>
+        <td><%= user.id %></td>
+        <td><%= user.username %></td>
+        <td><%= user.firstname %></td>
+        <td><%= user.lastname %></td>
+        <td><%= user.email %></td>
+        <td><%= user.address %></td>
+        <td><%= user.phone %></td>
+        <td><%= user.role %></td>
+        <td><%= user.membership %></td>
+        <td>
+          <button onclick='openEditUserModal(<%- JSON.stringify(user) %>)'>✏️</button>
+        </td>
+      </tr>
+    <% }) %>
+  </tbody>
+</table>
+
+<div id="editUserModal" style="display:none; position:fixed; top:10%; left:30%; background:white; padding:20px; border:1px solid #ccc;">
+  <form id="editUserForm">
+    <input type="hidden" name="id" id="editUserId">
+    <label>Email:</label><br>
+    <input type="email" id="editUserEmail"><br>
+    <label>First Name:</label><br>
+    <input type="text" id="editUserFirstName"><br>
+    <label>Last Name:</label><br>
+    <input type="text" id="editUserLastName"><br>
+    <label>Role:</label><br>
+    <input type="text" id="editUserRole"><br><br>
+    <button type="submit">Save</button>
+    <button type="button" onclick="closeEditUserModal()">Cancel</button>
+  </form>
+</div>
+
+<script>
+  function openEditUserModal(user) {
+    document.getElementById('editUserModal').style.display = 'block';
+    document.getElementById('editUserId').value = user.id;
+    document.getElementById('editUserEmail').value = user.email;
+    document.getElementById('editUserFirstName').value = user.firstname;
+    document.getElementById('editUserLastName').value = user.lastname;
+    document.getElementById('editUserRole').value = user.role;
+  }
+
+  function closeEditUserModal() {
+    document.getElementById('editUserModal').style.display = 'none';
+  }
+
+  document.getElementById('editUserForm').addEventListener('submit', async function (e) {
+    e.preventDefault();
+    const id = document.getElementById('editUserId').value;
+    const updatedUser = {
+      email: document.getElementById('editUserEmail').value,
+      firstname: document.getElementById('editUserFirstName').value,
+      lastname: document.getElementById('editUserLastName').value,
+      role: document.getElementById('editUserRole').value
+    };
+
+    try {
+      const response = await fetch(`http://localhost:3000/users/${id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + new URLSearchParams(window.location.search).get('token')
+        },
+        body: JSON.stringify(updatedUser)
+      });
+
+      if (response.ok) {
+        alert('User updated');
+        location.reload();
+      } else {
+        alert('Failed to update user');
+      }
+    } catch (error) {
+      console.error('Update error:', error);
+      alert('Something went wrong.');
+    }
+  });
+</script>
